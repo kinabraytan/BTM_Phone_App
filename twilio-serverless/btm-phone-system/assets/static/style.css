@@ -1,0 +1,347 @@
+:root {
+  --bg: #14161c;
+  --panel: #1f2330;
+  --accent: #4f9eff;
+  --accent-dark: #407fcc;
+  --danger: #ff5c5c;
+  --success: #34c759;
+  --text: #e9ecf1;
+  --muted: #7c8499;
+  --border: rgba(255, 255, 255, 0.08);
+  --font: "Inter", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background: linear-gradient(160deg, #10121a 0%, #1b2030 100%);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+#app-shell {
+  display: grid;
+  grid-template-columns: 320px minmax(420px, 1fr);
+  max-width: 1200px;
+  width: 95vw;
+  height: 90vh;
+  background: rgba(15, 18, 26, 0.75);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 40px 70px rgba(0, 0, 0, 0.35);
+}
+
+aside#sidebar {
+  background: #11131a;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+aside header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+aside header .subheading {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#status-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--panel);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.status-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(79, 158, 255, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-indicator.ready {
+  background: var(--success);
+  box-shadow: 0 0 12px rgba(52, 199, 89, 0.6);
+}
+
+.status-indicator.ringing {
+  background: #ff9f0a;
+  animation: pulse 1.2s infinite;
+}
+
+.status-indicator.oncall {
+  background: var(--accent);
+}
+
+.status-indicator.error {
+  background: var(--danger);
+  box-shadow: 0 0 12px rgba(255, 92, 92, 0.6);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+.status-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.quick-actions button {
+  width: 100%;
+}
+
+section.logs h2 {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--muted);
+}
+
+section.logs ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+section.logs li {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+}
+
+section.logs li .meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+section.logs li.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+main#workspace {
+  padding: 32px 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+#dialer {
+  background: var(--panel);
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid var(--border);
+}
+
+.display input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 28px;
+  text-align: center;
+  letter-spacing: 3px;
+  outline: none;
+}
+
+.dialpad {
+  display: grid;
+  grid-template-columns: repeat(3, 92px);
+  gap: 18px;
+  justify-content: center;
+}
+
+.dialpad button {
+  height: 92px;
+  border-radius: 32px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  position: relative;
+  transition: transform 0.15s ease, background 0.2s ease;
+  cursor: pointer;
+}
+
+.dialpad button span {
+  position: absolute;
+  bottom: 12px;
+  width: 100%;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+}
+
+.dialpad button:active {
+  transform: scale(0.96);
+  background: rgba(79, 158, 255, 0.15);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+button {
+  border: none;
+  border-radius: 16px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+button.primary {
+  background: var(--accent);
+  box-shadow: 0 10px 20px rgba(79, 158, 255, 0.25);
+}
+
+button.primary:hover {
+  background: var(--accent-dark);
+}
+
+button.danger {
+  background: var(--danger);
+  box-shadow: 0 10px 20px rgba(255, 92, 92, 0.25);
+}
+
+button.ghost {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+button.full {
+  width: 100%;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+#incall-controls {
+  display: flex;
+  gap: 16px;
+}
+
+#incall-controls .muted {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--danger);
+}
+
+#messaging {
+  background: var(--panel);
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#messaging h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+#messaging label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: var(--muted);
+}
+
+#messaging input,
+#messaging textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text);
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+#messaging textarea {
+  min-height: 120px;
+}
+
+@media (max-width: 960px) {
+  #app-shell {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  aside#sidebar {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px;
+  }
+
+  aside #logs {
+    flex: 1;
+    max-height: 220px;
+  }
+
+  main#workspace {
+    padding: 24px;
+  }
+}

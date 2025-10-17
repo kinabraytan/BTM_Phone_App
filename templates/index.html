@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1BTM Twilio Dialer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>1BTM Twilio Dialer</h1>
+        <div class="dialer">
+            <input type="text" id="number" name="number" value="{{ number_to_dial }}" placeholder="Enter E.164 number">
+            <button id="call-btn">Call</button>
+        </div>
+        <div class="sms-section">
+            <textarea id="sms-body" placeholder="Enter SMS message"></textarea>
+            <button id="sms-btn">Send SMS</button>
+        </div>
+        <div class="logs">
+            <h2>Call and SMS Logs</h2>
+            <ul id="log-list">
+                <!-- Logs will be dynamically inserted here -->
+            </ul>
+        </div>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>

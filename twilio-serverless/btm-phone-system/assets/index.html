@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTM Properties Phone System</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-h1d1k1OkJt3GX6RkC0cbB1rF2fzGEylh4G6dkprdOCi/hTyBC0bYKT1eZq9VHtV6nRvWmvMRGsiE9z1FMvxh1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body>
+  <div id="app-shell">
+    <aside id="sidebar">
+      <header>
+        <h1>BTM Properties</h1>
+        <p class="subheading">Phone System</p>
+      </header>
+      <section id="status-panel">
+        <div class="status-indicator ready" id="status-indicator"></div>
+        <div class="status-text" id="status-text">Initializing...</div>
+      </section>
+      <section class="quick-actions">
+        <button id="refresh-logs" class="ghost">Refresh Logs</button>
+      </section>
+      <section class="logs" id="logs">
+        <h2>Recent Calls</h2>
+        <ul id="call-log"></ul>
+        <h2>Recent SMS</h2>
+        <ul id="sms-log"></ul>
+      </section>
+    </aside>
+
+    <main id="workspace">
+      <section id="dialer">
+        <div class="display">
+          <input type="text" id="number-display" placeholder="Enter number" readonly>
+        </div>
+        <div class="dialpad" id="dialpad">
+          <button data-digit="1">1<span></span></button>
+          <button data-digit="2">2<span>ABC</span></button>
+          <button data-digit="3">3<span>DEF</span></button>
+          <button data-digit="4">4<span>GHI</span></button>
+          <button data-digit="5">5<span>JKL</span></button>
+          <button data-digit="6">6<span>MNO</span></button>
+          <button data-digit="7">7<span>PQRS</span></button>
+          <button data-digit="8">8<span>TUV</span></button>
+          <button data-digit="9">9<span>WXYZ</span></button>
+          <button data-digit="*">*<span></span></button>
+          <button data-digit="0">0<span>+</span></button>
+          <button data-digit="#">#<span></span></button>
+        </div>
+        <div class="actions">
+          <button id="call-btn" class="primary"><i class="fas fa-phone"></i></button>
+          <button id="hangup-btn" class="danger" style="display: none;"><i class="fas fa-phone-slash"></i></button>
+          <button id="backspace-btn" class="ghost"><i class="fas fa-delete-left"></i></button>
+        </div>
+        <div class="incall" id="incall-controls" style="display: none;">
+          <button id="mute-btn" class="ghost"><i class="fas fa-microphone"></i></button>
+        </div>
+      </section>
+      <section id="messaging">
+        <h2>Send SMS</h2>
+        <label for="sms-number">Phone Number</label>
+        <input type="text" id="sms-number" placeholder="E.164 number, e.g. +15551234567">
+        <label for="sms-body">Message</label>
+        <textarea id="sms-body" rows="4" placeholder="Type your message..."></textarea>
+        <button id="sms-send" class="primary full">Send SMS</button>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://sdk.twilio.com/js/voice/v2.11/twilio.min.js" integrity="sha384-/E4EYBLETymFcpnSUsctNk6heAQ7Ez+KQEiC5EvhczHxVn9Yx8RJWb1x1oGf4bmP" crossorigin="anonymous"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

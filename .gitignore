@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Twilio serverless build artifacts
+.twilio-functions
+.twilio-serverless
+.twilio-runtime
+
+# Environment & credentials
+.env
+.env.*
+*.env
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs & archives
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+backup-*
+
+# Coverage & reports
+.coverage
+coverage/
+
+# Misc
+*.pyc
