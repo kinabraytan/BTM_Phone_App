@@ -1,0 +1,5 @@
+{
+  "path": "/",
+  "methods": ["GET", "HEAD"],
+  "access": "public"
+}

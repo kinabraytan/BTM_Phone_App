@@ -1,18 +1,18 @@
-:root {
-  --bg: #14161c;
-  --panel: #1f2330;
-  --accent: #4f9eff;
-  --accent-dark: #407fcc;
-  --danger: #ff5c5c;
-  --success: #34c759;
-  --text: #e9ecf1;
-  --muted: #7c8499;
-  --border: rgba(255, 255, 255, 0.08);
-  --font: "Inter", "Segoe UI", sans-serif;
-}
-
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --bg: #f5f6fb;
+  --panel: #ffffff;
+  --border: #dfe2ee;
+  --text: #1b2133;
+  --muted: #6b7284;
+  --accent: #1c7ed6;
+  --accent-hover: #1864ab;
+  --danger: #e03131;
+  --success: #2f9e44;
+  --shadow: 0 18px 38px rgba(27, 33, 51, 0.08);
 }
 
 body {
@@ -20,75 +20,83 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  background: linear-gradient(160deg, #10121a 0%, #1b2030 100%);
+  align-items: center;
+  padding: 24px 16px;
+  background: var(--bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
-  font-family: var(--font);
+  line-height: 1.45;
 }
 
 #app-shell {
-  display: grid;
-  grid-template-columns: 320px minmax(420px, 1fr);
-  max-width: 1200px;
-  width: 95vw;
-  height: 90vh;
-  background: rgba(15, 18, 26, 0.75);
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  backdrop-filter: blur(24px);
-  box-shadow: 0 40px 70px rgba(0, 0, 0, 0.35);
-}
-
-aside#sidebar {
-  background: #11131a;
-  padding: 32px 28px;
+  width: min(900px, 100%);
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
+  gap: 20px;
+  max-height: calc(100vh - 32px);
 }
 
-aside header h1 {
+#app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 24px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.brand h1 {
   margin: 0;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
 }
 
-aside header .subheading {
+.brand p {
   margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 2px;
   text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 #status-panel {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px;
-  background: var(--panel);
-  border-radius: 16px;
+  padding: 12px 18px;
   border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #f8faff;
+  min-width: 210px;
 }
 
 .status-indicator {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(79, 158, 255, 0.5);
+  background: var(--muted);
+  box-shadow: 0 0 0 rgba(28, 126, 214, 0.4);
   transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .status-indicator.ready {
   background: var(--success);
-  box-shadow: 0 0 12px rgba(52, 199, 89, 0.6);
+  box-shadow: 0 0 10px rgba(47, 158, 68, 0.45);
 }
 
 .status-indicator.ringing {
-  background: #ff9f0a;
+  background: #ff922b;
   animation: pulse 1.2s infinite;
 }
 
@@ -98,17 +106,18 @@ aside header .subheading {
 
 .status-indicator.error {
   background: var(--danger);
-  box-shadow: 0 0 12px rgba(255, 92, 92, 0.6);
+  box-shadow: 0 0 10px rgba(224, 49, 49, 0.45);
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
   50% {
     transform: scale(1.2);
-    opacity: 0.6;
+    opacity: 0.7;
   }
 }
 
@@ -117,231 +126,394 @@ aside header .subheading {
   font-weight: 600;
 }
 
-.quick-actions button {
-  width: 100%;
-}
-
-section.logs h2 {
-  margin: 16px 0 8px;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1.4px;
-  color: var(--muted);
-}
-
-section.logs ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-section.logs li {
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.5;
-  border: 1px solid var(--border);
-}
-
-section.logs li .meta {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-section.logs li.empty {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--muted);
-  font-style: italic;
-}
-
-main#workspace {
-  padding: 32px 40px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
-}
-
-#dialer {
-  background: var(--panel);
-  border-radius: 24px;
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  border: 1px solid var(--border);
-}
-
-.display input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px;
-  font-size: 28px;
-  text-align: center;
-  letter-spacing: 3px;
-  outline: none;
-}
-
-.dialpad {
-  display: grid;
-  grid-template-columns: repeat(3, 92px);
-  gap: 18px;
-  justify-content: center;
-}
-
-.dialpad button {
-  height: 92px;
-  border-radius: 32px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  position: relative;
-  transition: transform 0.15s ease, background 0.2s ease;
-  cursor: pointer;
-}
-
-.dialpad button span {
-  position: absolute;
-  bottom: 12px;
-  width: 100%;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-}
-
-.dialpad button:active {
-  transform: scale(0.96);
-  background: rgba(79, 158, 255, 0.15);
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 button {
   border: none;
-  border-radius: 16px;
-  padding: 12px 20px;
+  border-radius: 14px;
+  padding: 10px 18px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: var(--text);
-  background: rgba(255, 255, 255, 0.08);
+  background: #eef1f9;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
-button.primary {
-  background: var(--accent);
-  box-shadow: 0 10px 20px rgba(79, 158, 255, 0.25);
+button .label {
+  pointer-events: none;
 }
 
-button.primary:hover {
-  background: var(--accent-dark);
-}
-
-button.danger {
-  background: var(--danger);
-  box-shadow: 0 10px 20px rgba(255, 92, 92, 0.25);
-}
-
-button.ghost {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-button.full {
-  width: 100%;
+button:hover {
+  background: #e1e6f2;
 }
 
 button:active {
   transform: translateY(1px);
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(28, 126, 214, 0.25);
+}
+
+button.primary:hover {
+  background: var(--accent-hover);
+}
+
+button.danger {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(224, 49, 49, 0.25);
+}
+
+button.ghost {
+  background: #eef1f9;
+}
+
+button.full {
+  width: 100%;
+  justify-content: center;
+}
+
+#workspace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 0 8px 8px;
+  overflow: hidden;
+}
+
+#view-toggle {
+  display: inline-flex;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 6px;
+  gap: 6px;
+  box-shadow: var(--shadow);
+}
+
+#view-toggle button {
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 18px;
+  border-radius: 10px;
+}
+
+#view-toggle button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  width: min(100%, 440px);
+}
+
+#activity.panel {
+  width: min(100%, 520px);
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.display {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.display input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 58px 16px 16px;
+  font-size: 26px;
+  text-align: center;
+  letter-spacing: 2px;
+  background: #f4f7ff;
+  color: var(--text);
+}
+
+.display input:focus {
+  outline: 2px solid rgba(28, 126, 214, 0.2);
+}
+
+.icon-btn {
+  position: absolute;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  justify-content: center;
+  padding: 0;
+}
+
+.icon-btn:hover {
+  background: rgba(28, 126, 214, 0.08);
+}
+
+.dialpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.dialpad button {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 22px;
+  background: #f4f6fd;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.dialpad button .digit {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.dialpad button .legend {
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  color: var(--muted);
+}
+
+.dialpad button:hover {
+  background: #e8ecf9;
+}
+
+.dialpad button:active {
+  transform: scale(0.97);
+}
+
+.primary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+#open-sms-btn {
+  min-width: 140px;
+}
+
+.call-toggle {
+  position: relative;
+  width: 150px;
+  min-height: 52px;
+  display: flex;
+  justify-content: center;
+}
+
+.call-toggle button {
+  width: 100%;
+  justify-content: center;
+}
+
+.call-toggle #hangup-btn {
+  position: absolute;
+  inset: 0;
+}
+
 #incall-controls {
   display: flex;
-  gap: 16px;
+  justify-content: center;
+  gap: 12px;
 }
 
 #incall-controls .muted {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(28, 33, 51, 0.12);
   color: var(--danger);
 }
 
-#messaging {
-  background: var(--panel);
-  border-radius: 24px;
-  padding: 28px;
-  border: 1px solid var(--border);
+.message-shell {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-#messaging h2 {
-  margin: 0;
-  font-size: 18px;
+.conversation-preview {
+  background: #f6f8ff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-#messaging label {
+.message-bubble {
+  max-width: 240px;
+  padding: 10px 14px;
+  border-radius: 16px;
   font-size: 13px;
+  background: #e6ebf5;
+  color: var(--text);
+}
+
+.message-bubble.outbound {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #fff;
+}
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.composer label {
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1.6px;
+  letter-spacing: 0.18em;
   color: var(--muted);
 }
 
-#messaging input,
-#messaging textarea {
+.composer input,
+.composer textarea {
   width: 100%;
-  padding: 14px 16px;
-  background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  color: var(--text);
-  resize: none;
-  font-family: inherit;
+  border-radius: 14px;
+  padding: 12px 14px;
   font-size: 14px;
+  background: #f4f7ff;
+  color: var(--text);
+  font-family: inherit;
 }
 
-#messaging textarea {
-  min-height: 120px;
+.composer textarea {
+  resize: vertical;
+  min-height: 110px;
 }
 
-@media (max-width: 960px) {
+.activity-group h3 {
+  margin: 0;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.log-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.log-list li {
+  background: #f6f8ff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.log-list li .meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.log-list li.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.placeholder {
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.placeholder i {
+  font-size: 36px;
+}
+
+#workspace[data-active-view="dialer"] #dialer,
+#workspace[data-active-view="messaging"] #messaging,
+#workspace[data-active-view="activity"] #activity,
+#workspace[data-active-view="contacts"] #contacts {
+  display: flex;
+}
+
+@media (max-width: 860px) {
   #app-shell {
-    grid-template-columns: 1fr;
-    height: auto;
+    max-height: none;
   }
 
-  aside#sidebar {
-    flex-direction: row;
+  #app-header {
+    flex-direction: column;
     align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
     justify-content: space-between;
-    padding: 24px;
+  }
+}
+
+@media (max-width: 540px) {
+  #app-header {
+    padding: 16px;
   }
 
-  aside #logs {
-    flex: 1;
-    max-height: 220px;
+  button {
+    padding: 10px 16px;
   }
 
-  main#workspace {
-    padding: 24px;
+  .dialpad {
+    gap: 10px;
+  }
+
+  .dialpad button {
+    border-radius: 18px;
   }
 }

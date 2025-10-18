@@ -2,7 +2,6 @@
   "name": "btm-phone-system",
   "description": "Twilio Serverless deployment for the BTM Properties Phone System softphone UI and APIs.",
   "private": true,
-  "dependencies": {},
   "scripts": {
     "deploy:dev": "twilio serverless:deploy --service-name=btm-phone-system --environment=dev --assets --functions",
     "deploy:prod": "twilio serverless:deploy --service-name=btm-phone-system --environment=prod --assets --functions",

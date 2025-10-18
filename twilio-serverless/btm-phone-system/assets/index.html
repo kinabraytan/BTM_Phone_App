@@ -10,66 +10,127 @@
 </head>
 <body>
   <div id="app-shell">
-    <aside id="sidebar">
-      <header>
+    <header id="app-header">
+      <div class="brand">
         <h1>BTM Properties</h1>
-        <p class="subheading">Phone System</p>
-      </header>
-      <section id="status-panel">
-        <div class="status-indicator ready" id="status-indicator"></div>
-        <div class="status-text" id="status-text">Initializing...</div>
-      </section>
-      <section class="quick-actions">
-        <button id="refresh-logs" class="ghost">Refresh Logs</button>
-      </section>
-      <section class="logs" id="logs">
-        <h2>Recent Calls</h2>
-        <ul id="call-log"></ul>
-        <h2>Recent SMS</h2>
-        <ul id="sms-log"></ul>
-      </section>
-    </aside>
+        <p>Phone System</p>
+      </div>
+      <div class="header-actions">
+        <section id="status-panel" aria-live="polite">
+          <div class="status-indicator ready" id="status-indicator" aria-hidden="true"></div>
+          <div class="status-text" id="status-text">Initializing...</div>
+        </section>
+        <button id="refresh-logs" class="ghost" type="button">
+          <i class="fas fa-rotate"></i>
+          <span class="label">Refresh Logs</span>
+        </button>
+      </div>
+    </header>
 
-    <main id="workspace">
-      <section id="dialer">
+    <main id="workspace" data-active-view="dialer">
+      <nav id="view-toggle" aria-label="Primary navigation">
+        <button data-view="dialer" class="active" type="button" aria-pressed="true">Dial Pad</button>
+        <button data-view="messaging" type="button" aria-pressed="false">Messages</button>
+        <button data-view="activity" type="button" aria-pressed="false">Logs</button>
+        <button data-view="contacts" type="button" aria-pressed="false">Contacts</button>
+      </nav>
+
+      <section id="dialer" class="panel" data-view="dialer">
         <div class="display">
-          <input type="text" id="number-display" placeholder="Enter number" readonly>
+          <input type="text" id="number-display" placeholder="Enter number" list="recent-numbers" autocomplete="tel">
+          <button id="backspace-btn" class="icon-btn" type="button" aria-label="Delete last digit">
+            <i class="fas fa-delete-left"></i>
+          </button>
+          <datalist id="recent-numbers"></datalist>
         </div>
         <div class="dialpad" id="dialpad">
-          <button data-digit="1">1<span></span></button>
-          <button data-digit="2">2<span>ABC</span></button>
-          <button data-digit="3">3<span>DEF</span></button>
-          <button data-digit="4">4<span>GHI</span></button>
-          <button data-digit="5">5<span>JKL</span></button>
-          <button data-digit="6">6<span>MNO</span></button>
-          <button data-digit="7">7<span>PQRS</span></button>
-          <button data-digit="8">8<span>TUV</span></button>
-          <button data-digit="9">9<span>WXYZ</span></button>
-          <button data-digit="*">*<span></span></button>
-          <button data-digit="0">0<span>+</span></button>
-          <button data-digit="#">#<span></span></button>
+          <button data-digit="1" type="button"><span class="digit">1</span><span class="legend"></span></button>
+          <button data-digit="2" type="button"><span class="digit">2</span><span class="legend">ABC</span></button>
+          <button data-digit="3" type="button"><span class="digit">3</span><span class="legend">DEF</span></button>
+          <button data-digit="4" type="button"><span class="digit">4</span><span class="legend">GHI</span></button>
+          <button data-digit="5" type="button"><span class="digit">5</span><span class="legend">JKL</span></button>
+          <button data-digit="6" type="button"><span class="digit">6</span><span class="legend">MNO</span></button>
+          <button data-digit="7" type="button"><span class="digit">7</span><span class="legend">PQRS</span></button>
+          <button data-digit="8" type="button"><span class="digit">8</span><span class="legend">TUV</span></button>
+          <button data-digit="9" type="button"><span class="digit">9</span><span class="legend">WXYZ</span></button>
+          <button data-digit="*" type="button"><span class="digit">*</span><span class="legend"></span></button>
+          <button data-digit="0" type="button"><span class="digit">0</span><span class="legend">+</span></button>
+          <button data-digit="#" type="button"><span class="digit">#</span><span class="legend"></span></button>
         </div>
-        <div class="actions">
-          <button id="call-btn" class="primary"><i class="fas fa-phone"></i></button>
-          <button id="hangup-btn" class="danger" style="display: none;"><i class="fas fa-phone-slash"></i></button>
-          <button id="backspace-btn" class="ghost"><i class="fas fa-delete-left"></i></button>
+        <div class="primary-actions">
+          <div class="call-toggle">
+            <button id="call-btn" class="primary action-btn" type="button">
+              <i class="fas fa-phone"></i>
+              <span class="label">Call</span>
+            </button>
+            <button id="hangup-btn" class="danger action-btn" type="button" style="display: none;">
+              <i class="fas fa-phone-slash"></i>
+              <span class="label">End</span>
+            </button>
+          </div>
+          <button id="open-sms-btn" class="ghost action-btn" type="button">
+            <i class="fas fa-message"></i>
+            <span class="label">Text SMS</span>
+          </button>
         </div>
         <div class="incall" id="incall-controls" style="display: none;">
-          <button id="mute-btn" class="ghost"><i class="fas fa-microphone"></i></button>
+          <button id="mute-btn" class="ghost action-btn" type="button">
+            <i class="fas fa-microphone"></i>
+            <span class="label">Mute</span>
+          </button>
         </div>
       </section>
-      <section id="messaging">
-        <h2>Send SMS</h2>
-        <label for="sms-number">Phone Number</label>
-        <input type="text" id="sms-number" placeholder="E.164 number, e.g. +15551234567">
-        <label for="sms-body">Message</label>
-        <textarea id="sms-body" rows="4" placeholder="Type your message..."></textarea>
-        <button id="sms-send" class="primary full">Send SMS</button>
+
+      <section id="messaging" class="panel" data-view="messaging">
+        <header class="panel-header">
+          <h2>Messages</h2>
+        </header>
+        <div class="message-shell">
+          <div class="conversation-preview" aria-hidden="true">
+            <div class="message-bubble outbound">Call me when you can.</div>
+            <div class="message-bubble inbound">On it! Need anything else?</div>
+            <div class="message-bubble outbound">Please confirm the showing for 3 PM.</div>
+          </div>
+          <div class="composer">
+            <label for="sms-number">Phone Number</label>
+            <input type="text" id="sms-number" placeholder="E.164 number, e.g. +15551234567" list="recent-numbers" autocomplete="tel">
+            <label for="sms-body">Message</label>
+            <textarea id="sms-body" rows="4" placeholder="Type your message..."></textarea>
+            <button id="sms-send" class="primary full" type="button">
+              <i class="fas fa-paper-plane"></i>
+              <span class="label">Send SMS</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="activity" class="panel" data-view="activity">
+        <header class="panel-header">
+          <h2>Logs</h2>
+        </header>
+        <div class="activity-group">
+          <h3>Calls</h3>
+          <ul id="call-log" class="log-list"></ul>
+        </div>
+        <div class="activity-group">
+          <h3>Messages</h3>
+          <ul id="sms-log" class="log-list"></ul>
+        </div>
+      </section>
+
+      <section id="contacts" class="panel" data-view="contacts">
+        <header class="panel-header">
+          <h2>Contacts</h2>
+        </header>
+        <div class="placeholder">
+          <i class="fas fa-address-book" aria-hidden="true"></i>
+          <p>Contacts UI under construction.</p>
+        </div>
       </section>
     </main>
   </div>
 
-  <script src="https://sdk.twilio.com/js/voice/v2.11/twilio.min.js" integrity="sha384-/E4EYBLETymFcpnSUsctNk6heAQ7Ez+KQEiC5EvhczHxVn9Yx8RJWb1x1oGf4bmP" crossorigin="anonymous"></script>
-  <script src="/static/app.js"></script>
+  <script src="/static/vendor/twilio.min.js" defer></script>
+  <script src="/static/app.js" defer></script>
 </body>
 </html>
