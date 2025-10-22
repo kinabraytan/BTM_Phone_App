@@ -21,6 +21,9 @@ yarn-error.log*
 .twilio-serverless
 .twilio-runtime
 
+# Twilio deployment info (contains secrets)
+twilio-serverless/btm-phone-system/.twiliodeployinfo
+
 # Environment & credentials
 .env
 .env.*
