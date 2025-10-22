@@ -1,53 +1,61 @@
-# 1BTM Properties Twilio App - AI Coding Instructions
+
+# 1BTM Properties Twilio App — AI Coding Instructions
 
 ## Project Overview
-This is a web-based phone application using Twilio for voice and SMS communications. The primary goal is to create a functional web interface that can operate like a phone. Users will initiate calls by clicking specially formatted links in an external spreadsheet, which will open this web app.
+This is a web-based phone and SMS app for BTM Properties, built around Twilio Serverless Functions and a browser UI. The main goal is to enable virtual assistants to call and text contacts from a spreadsheet, with all communications managed via the web interface.
 
-The active deployment target is a Twilio Serverless (Functions + Assets) project located under `twilio-serverless/btm-phone-system`. The legacy Flask app is still available for local experimentation but is no longer the primary delivery path.
+## Architecture & Major Components
+- **Twilio Serverless (Primary)**: All production logic lives in `twilio-serverless/btm-phone-system`.
+	- **Functions**: `/token`, `/voice`, `/send-sms`, `/logs`, `/incoming-sms`, `/disconnect-call`, `/root-redirect`.
+	- **Assets**: UI in `assets/index.html`, JS in `assets/static/app.js`, CSS in `assets/static/style.css`, Twilio SDK in `assets/static/vendor/twilio.min.js`.
+- **Legacy Flask App (Secondary)**: `app.py` and `templates/` for local testing only. Do not expand unless explicitly requested.
 
-## Architecture & Key Components
+## Data Flow & Integration
+1. User clicks a spreadsheet link (e.g., `...?number=+15551234567`).
+2. UI loads, pre-filling dialer/SMS fields.
+3. User initiates call/SMS via UI (`app.js`).
+4. Frontend fetches token from `/token`, calls via Twilio Voice JS SDK, or sends SMS via `/send-sms`.
+5. Serverless functions use Twilio REST APIs; `/voice` returns TwiML, `/logs` aggregates recent activity.
+6. No database—contacts managed externally.
 
-### Core Services
-- **Twilio Serverless Functions**: `/token`, `/voice`, `/send-sms`, `/logs`, and `/incoming-sms` power the softphone, TwiML responses, SMS sending, and recent activity feed.
-- **Static Assets**: Hosted UI in `assets/index.html` with supporting CSS/JS under `assets/static/` (Voice JS SDK client lives in `app.js`).
-- **Legacy Flask App**: `app.py` remains for reference/local testing but should not be expanded unless explicitly requested.
+## Developer Workflow
+- **Setup**:
+	- Install Twilio CLI + Serverless plugin.
+	- Copy `.env.example` to `.env` in `twilio-serverless/btm-phone-system` and fill in credentials.
+	- For Flask: `pip install -r requirements.txt` (optional).
+- **Deploy**:
+	- Use `npm run deploy:dev` or Twilio CLI to deploy serverless code and assets.
+	- Validate UI and endpoints after each deploy.
+- **Debug/Test**:
+	- Use `/logs` endpoint for recent call/SMS activity (no DB).
+	- Console logs and HTTP error responses surface issues.
 
-### Data Flow
-1. A user clicks a link in a spreadsheet (e.g., `https://your-app-url/call?number=+15551234567`).
-2. The Twilio-hosted UI (`assets/index.html`) loads, pre-filling the dialer and SMS form with the query number.
-3. The user clicks "Call" or "Send SMS" in the UI (`assets/static/app.js`).
-4. The frontend requests a Voice Access Token from `/token` and places a call via the Twilio Voice JS SDK, or posts to `/send-sms` for messaging.
-5. Functions invoke Twilio REST APIs; `/voice` returns TwiML to bridge calls, `/incoming-sms` replies to inbound texts.
-6. `/logs` aggregates recent call/message activity for display.
+## Project-Specific Patterns & Conventions
+- **Twilio Integration**:
+	- Use `Twilio.Response`, `context.getTwilioClient()`, TwiML helpers in serverless functions.
+	- All phone numbers must be E.164 format.
+	- Frontend uses `Twilio.Device` for calls, fetches tokens from `/token`.
+- **Error Handling**:
+	- Functions return structured error responses (JSON or TwiML).
+	- Critical errors logged to console and surfaced in UI.
+- **No Database**:
+	- All logs and contacts are managed via Twilio APIs and external spreadsheets.
+- **Environment Variables**:
+	- Required: `ACCOUNT_SID`, `AUTH_TOKEN`, `API_KEY_SID`, `API_KEY_SECRET`, `TWILIO_PHONE_NUMBER`, `TWIML_APP_SID`.
+	- Never commit `.env` files.
 
-## Development Workflow
+## Key Files & Directories
+- `twilio-serverless/btm-phone-system/functions/` — All backend logic (see: `token.js`, `voice.js`, `send-sms.js`, `logs.js`, etc.)
+- `twilio-serverless/btm-phone-system/assets/` — UI and static assets
+- `app.py` — Legacy Flask app (local only)
+- `templates/` — Flask HTML templates
 
-### Setup & Dependencies
-- Install the Twilio CLI along with the Serverless plugin.
-- Copy `twilio-serverless/btm-phone-system/.env.example` to `.env` in the same folder and populate it.
-- Legacy Flask app tooling (virtualenv, `pip install -r requirements.txt`) is optional and only needed for local debugging of `app.py`.
+## AI Agent Guidance
+- Focus on Twilio integration and communication features.
+- Do not add database code; contacts/logs are external.
+- Always remind users to set up Twilio credentials.
+- Use the Serverless project for all production changes.
+- Validate UI and endpoints after deployment.
 
-### Environment Configuration
-- Serverless `.env` requires: `ACCOUNT_SID`, `AUTH_TOKEN`, `API_KEY_SID`, `API_KEY_SECRET`, `TWILIO_PHONE_NUMBER`, and `TWIML_APP_SID`.
-- API keys should be standard Voice-capable keys (not project tokens). The Auth Token is only used by `context.getTwilioClient()`.
-- Keep the `.env` file local; never commit credentials.
-
-## Code Patterns & Conventions
-
-### Twilio Integration
-- Serverless handlers should lean on `Twilio.Response`, `context.getTwilioClient()`, and TwiML helpers.
-- Frontend uses the Voice JS SDK (`Twilio.Device`) and fetches tokens from `/token`.
-- All phone numbers should be in E.164 format.
-
-### Logging
-- `/logs` currently reads from Twilio's REST APIs; no database is used. Surface critical errors via HTTP responses and console logs.
-- The legacy Flask logger still writes to `app.log` but is not part of the hosted workflow.
-
-## Important Notes for AI Agents
-- **No Database**: This project does not use a traditional database. Contact data is managed externally in a spreadsheet.
-- **Focus on Communication**: The core features are calling and messaging. UI development should support these actions.
-- **Credentials**: Remind the user to set up Twilio credentials.
-- **Deployment**: Use `npm run deploy:dev` or an equivalent Twilio CLI command from `twilio-serverless/btm-phone-system` to publish updates. Validate the hosted assets after each deploy.
 ---
-
-*This file will be updated as the codebase develops. Focus on the Twilio integration and the Flask web interface.*
+*Update this file as the codebase evolves. Document only actual, discoverable patterns—not aspirational practices.*

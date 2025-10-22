@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     muted: false,
     identity: null,
     activeCallSid: null,
+    pendingConnection: null,
   };
 
   const refs = {
@@ -32,6 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
     viewToggle: document.getElementById('view-toggle'),
     recentNumbers: document.getElementById('recent-numbers'),
     openSmsButton: document.getElementById('open-sms-btn'),
+    incomingBanner: document.getElementById('incoming-call-banner'),
+    incomingFrom: document.getElementById('incoming-call-from'),
+    incomingTo: document.getElementById('incoming-call-to'),
+    answerButton: document.getElementById('answer-call'),
+    rejectButton: document.getElementById('reject-call'),
   };
 
   refs.callButton.disabled = true;
@@ -162,10 +168,55 @@ document.addEventListener('DOMContentLoaded', () => {
     refs.dialpad.style.pointerEvents = inCall ? 'none' : 'initial';
   };
 
+  function showIncomingCallBanner(connection) {
+    if (!refs.incomingBanner) {
+      return;
+    }
+    const from = connection?.parameters?.From || 'Unknown';
+    const to = connection?.parameters?.To || '';
+    if (refs.incomingFrom) {
+      refs.incomingFrom.textContent = `From: ${from}`;
+    }
+    if (refs.incomingTo) {
+      refs.incomingTo.textContent = to ? `To: ${to}` : '';
+    }
+    if (refs.answerButton) {
+      refs.answerButton.disabled = false;
+    }
+    if (refs.rejectButton) {
+      refs.rejectButton.disabled = false;
+    }
+    refs.incomingBanner.classList.add('active');
+    refs.incomingBanner.setAttribute('aria-hidden', 'false');
+    setStatus(`Incoming call from ${from}`, 'ringing');
+  }
+
+  function hideIncomingCallBanner() {
+    if (!refs.incomingBanner) {
+      return;
+    }
+    refs.incomingBanner.classList.remove('active');
+    refs.incomingBanner.setAttribute('aria-hidden', 'true');
+    if (refs.incomingFrom) {
+      refs.incomingFrom.textContent = 'Unknown Caller';
+    }
+    if (refs.incomingTo) {
+      refs.incomingTo.textContent = '';
+    }
+    if (refs.answerButton) {
+      refs.answerButton.disabled = false;
+    }
+    if (refs.rejectButton) {
+      refs.rejectButton.disabled = false;
+    }
+  }
+
   const resetCallUI = (statusText = 'Ready', statusClass = 'ready') => {
     state.connection = null;
     state.muted = false;
     state.activeCallSid = null;
+    state.pendingConnection = null;
+    hideIncomingCallBanner();
     refs.muteButton.classList.remove('muted');
     refs.muteButton.disabled = true;
     refs.muteButton.title = 'Mute call';
@@ -273,13 +324,21 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       state.device.on('incoming', (connection) => {
-        setStatus(`Incoming call from ${connection.parameters.From}`, 'ringing');
-        if (confirm(`Accept call from ${connection.parameters.From}?`)) {
-          state.connection = connection;
-          connection.accept();
-        } else {
-          connection.reject();
+        state.pendingConnection = connection;
+        showIncomingCallBanner(connection);
+        if (refs.numberDisplay) {
+          refs.numberDisplay.value = (connection.parameters?.From || '').trim();
         }
+        const cleanupPending = () => {
+          if (state.pendingConnection === connection) {
+            state.pendingConnection = null;
+            hideIncomingCallBanner();
+          }
+        };
+        connection.on('cancel', cleanupPending);
+        connection.on('disconnect', cleanupPending);
+        connection.on('reject', cleanupPending);
+        connection.on('error', cleanupPending);
       });
 
       state.device.on('connect', (connection) => {
@@ -457,6 +516,44 @@ document.addEventListener('DOMContentLoaded', () => {
     refs.openSmsButton.addEventListener('click', () => {
       refs.smsNumber.value = refs.numberDisplay.value.trim();
       setActiveView('messaging');
+    });
+  }
+
+  if (refs.answerButton) {
+    refs.answerButton.addEventListener('click', () => {
+      if (!state.pendingConnection) {
+        return;
+      }
+      refs.answerButton.disabled = true;
+      if (refs.rejectButton) {
+        refs.rejectButton.disabled = true;
+      }
+      try {
+        state.pendingConnection.accept();
+        state.pendingConnection = null;
+        hideIncomingCallBanner();
+        setStatus('Connecting...', 'ringing');
+      } catch (error) {
+        console.error('Failed to accept call', error);
+        resetCallUI(`Call failed: ${error.message}`, 'error');
+      }
+    });
+  }
+
+  if (refs.rejectButton) {
+    refs.rejectButton.addEventListener('click', () => {
+      if (!state.pendingConnection) {
+        return;
+      }
+      try {
+        state.pendingConnection.reject();
+      } catch (error) {
+        console.error('Failed to reject call', error);
+      }
+      state.pendingConnection = null;
+      hideIncomingCallBanner();
+      const label = state.identity ? `Ready — ${state.identity}` : 'Ready';
+      setStatus(label, 'ready');
     });
   }
 

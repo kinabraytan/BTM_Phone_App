@@ -10,6 +10,25 @@
 </head>
 <body>
   <div id="app-shell">
+    <div id="incoming-call-banner" role="alertdialog" aria-hidden="true" aria-modal="true">
+      <div class="banner-card">
+        <h2>Incoming Call</h2>
+        <div class="call-details">
+          <span id="incoming-call-from">Unknown Caller</span>
+          <span id="incoming-call-to"></span>
+        </div>
+        <div class="actions">
+          <button id="reject-call" class="ghost" type="button">
+            <i class="fas fa-phone-slash"></i>
+            <span class="label">Decline</span>
+          </button>
+          <button id="answer-call" class="primary" type="button">
+            <i class="fas fa-phone"></i>
+            <span class="label">Answer</span>
+          </button>
+        </div>
+      </div>
+    </div>
     <header id="app-header">
       <div class="brand">
         <h1>BTM Properties</h1>
