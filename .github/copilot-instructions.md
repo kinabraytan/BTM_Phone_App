@@ -32,9 +32,11 @@ This is a web-based phone and SMS app for BTM Properties, built around Twilio Se
 
 ## Project-Specific Patterns & Conventions
 - **Twilio Integration**:
+**Twilio Integration**:
 	- Use `Twilio.Response`, `context.getTwilioClient()`, TwiML helpers in serverless functions.
 	- All phone numbers must be E.164 format.
 	- Frontend uses `Twilio.Device` for calls, fetches tokens from `/token`.
+	- For SMS sending logic, reference `templates/twilio_sms_sample.py` for the correct usage of the Twilio Python client. The sending number should be `+16093373558` (update API keys as needed).
 - **Error Handling**:
 	- Functions return structured error responses (JSON or TwiML).
 	- Critical errors logged to console and surfaced in UI.
@@ -49,6 +51,11 @@ This is a web-based phone and SMS app for BTM Properties, built around Twilio Se
 - `twilio-serverless/btm-phone-system/assets/` — UI and static assets
 - `app.py` — Legacy Flask app (local only)
 - `templates/` — Flask HTML templates
+`twilio-serverless/btm-phone-system/functions/` — All backend logic (see: `token.js`, `voice.js`, `send-sms.js`, `logs.js`, etc.)
+`twilio-serverless/btm-phone-system/assets/` — UI and static assets
+`app.py` — Legacy Flask app (local only)
+`templates/twilio_sms_sample.py` — Reference implementation for Twilio SMS sending in Python (use this for SMS logic and number formatting)
+`templates/` — Flask HTML templates
 
 ## AI Agent Guidance
 - Focus on Twilio integration and communication features.
