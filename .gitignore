@@ -26,6 +26,9 @@ yarn-error.log*
 .env.*
 *.env
 
+# Secrets and sensitive files
+templates/twilio_sms_sample.py
+
 # IDE & OS
 .vscode/
 .idea/
